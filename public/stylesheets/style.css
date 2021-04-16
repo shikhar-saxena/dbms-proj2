@@ -35,7 +35,7 @@ background: linear-gradient(to right, #1F1C18, #8E0E00); /* W3C, IE 10+/ Edge, F
 @media (min-width: 992px)
 {
     .navbar .navbar-brand strong{
-        font-family: 'Yellowtail', cursive; 
+        font-family:  'Yellowtail', cursive; 
         font-size: 35px; 
         position: absolute; 
         left: 45%;
