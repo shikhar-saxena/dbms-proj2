@@ -8,7 +8,7 @@ var dotenv = require('dotenv');
 // Load Config
 dotenv.config({ path: './config/config.env'});
 
-var donarRouter = require('./routes/donar');
+var donorRouter = require('./routes/donor');
 var usersRouter = require('./routes/users');
 var seekerRouter = require('./routes/seeker');
 
@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/donar', donarRouter);
+app.use('/donor', donorRouter);
 app.use('/users', usersRouter);
 app.use('/seeker', seekerRouter);
 app.get('/', (req, res) => {
