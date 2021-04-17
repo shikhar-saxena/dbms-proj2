@@ -24,6 +24,7 @@ initializePassport(passport);
 var donorRouter = require('./routes/donor');
 var usersRouter = require('./routes/users');
 var seekerRouter = require('./routes/seeker');
+var dashboardRouter = require('./routes/dashboard');
 
 var app = express();
 
@@ -54,7 +55,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-
+app.use('/dashboard', dashboardRouter);
 app.use('/donor', donorRouter);
 app.use('/users', usersRouter);
 app.use('/seeker', seekerRouter);
