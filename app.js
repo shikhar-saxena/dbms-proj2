@@ -1,20 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
 
-require("dotenv").config();
-
-const { Pool } = require("pg");
-
-const isProduction = process.env.NODE_ENV === "production";
-
-const connectionString = `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_DATABASE}`;
-
-const pool = new Pool({
-  connectionString: isProduction ? process.env.DATABASE_URL : connectionString,
-  ssl: isProduction
-});
-
-
 
 const bcrypt = require("bcrypt");
 const passport = require("passport");
@@ -29,11 +15,13 @@ var dotenv = require('dotenv');
 // Load Config
 dotenv.config({ path: './config/config.env'});
 
+var {pool} = require('./dbConfig');
+
 const initializePassport = require("./passportConfig");
 
 initializePassport(passport);
 
-var donarRouter = require('./routes/donar');
+var donorRouter = require('./routes/donor');
 var usersRouter = require('./routes/users');
 var seekerRouter = require('./routes/seeker');
 
@@ -69,7 +57,7 @@ app.use(passport.session());
 app.use(flash());
 
 
-app.use('/donar', donarRouter);
+app.use('/donor', donorRouter);
 app.use('/users', usersRouter);
 app.use('/seeker', seekerRouter);
 app.get('/', (req, res) => {
@@ -188,12 +176,6 @@ function checkNotAuthenticated(req, res, next) {
   }
   res.redirect("/users/login");
 }
-
-// const initializePassport = require("./passportConfig");
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
 
 // error handler
 app.use(function(err, req, res, next) {
