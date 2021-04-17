@@ -29,8 +29,6 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-// Parses details from a form
-app.use(express.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
