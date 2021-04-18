@@ -44,9 +44,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-// routes
+// GET routes
 app.get('/', (req, res) => {
-  res.sendFile('./index.html', { root: __dirname });
+  res.render('index.ejs');
 });
 
 app.get("/users/register", checkAuthenticated, (req, res) => {
@@ -59,7 +59,7 @@ app.get("/users/login", checkAuthenticated, (req, res) => {
 
 app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
   console.log(req.isAuthenticated());
-  res.render("dashboard", { user: req.user.name, title: 'Donor' });
+  res.render("dashboard", { user: req.user.name, email: req.user.email, title: 'Donor' });
 });
 
 app.get('/users/donor', checkNotAuthenticated, function(req, res, next) {
@@ -68,9 +68,10 @@ app.get('/users/donor', checkNotAuthenticated, function(req, res, next) {
 
 app.get("/users/logout", (req, res) => {
   req.logout();
-  res.render("index", { message: "You have logged out successfully" });
+  res.redirect("/");
 });
 
+// POST requests
 app.post("/users/register", async (req, res) => {
   let { name, email, password, password2 } = req.body;
 
@@ -143,6 +144,74 @@ app.post(
     failureFlash: true
   })
 );
+
+app.post('/users/donor', async (req, res) => {
+  let { bgroup, g, bdate, bmonth, byear, wt, ldd, ldm, ldy, address, pincode, state, district, city, mobile } = req.body;
+
+  let errors = [];
+
+  console.log({
+    bgroup, g, bdate, bmonth, byear, wt, ldd, ldm, ldy, address, pincode, state, district, city, mobile
+  });
+
+  if (!bgroup || !g || !bdate || !bmonth || !byear || !wt || !address || !pincode || !state || !district || !city || !mobile) {
+    errors.push({ message: "Please enter the necessary fields" });
+  }
+
+  var age = (bdate, bmonth, byear) => {
+    var today = new Date();
+    var birthDate = new Date(`${byear}${bmonth}${bdate}`);
+    return today.getFullYear() - birthDate.getFullYear();
+  }
+
+  if (age < 18) {
+    errors.push({ message: "Donating blood is not permitted" });
+  }
+
+  if (wt < 50) {
+    errors.push({ message: "Donating blood is not permitted" });
+  }
+
+  if (errors.length > 0) {
+    res.render("register", { errors, name, email, password, password2 });
+  } else {
+    hashedPassword = await bcrypt.hash(password, 10);
+    console.log(hashedPassword);
+    // Validation passed
+    pool.query(
+      `SELECT * FROM users
+        WHERE email = $1`,
+      [email],
+      (err, results) => {
+        if (err) {
+          console.log(err);
+        }
+        console.log(results.rows);
+        
+        if (results.rows.length > 0) {
+          return res.render("register", {
+            message: "Email already registered"
+          });
+        } else {
+          pool.query(
+            `INSERT INTO users (name, email, password)
+                VALUES ($1, $2, $3)
+                RETURNING id, password`,
+            [name, email, hashedPassword],
+            (err, results) => {
+              if (err) {
+                throw err;
+              }
+              console.log(results.rows);
+              req.flash("success_msg", "You are now registered. Please log in");
+              res.redirect("/users/login");
+            }
+          );
+        }
+      }
+    );
+  }
+});
 
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
