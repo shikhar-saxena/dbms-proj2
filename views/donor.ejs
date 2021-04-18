@@ -89,32 +89,7 @@
                       <!--Form Portlet-->
                       <div class="donation-form-outer">
                           <div class="form-portlet">
-                              <h3>Login Information</h3>
-
-                              <div class="row clearfix">
-
-                                  <div class="form-group col-lg-6 col-md-6 col-sm-6 ">
-                                      <div class="field-label">Full Name <span class="required">*</span></div>
-                                      <input name="ctl00$ContentPlaceHolder1$txtName" type="text" id="ctl00_ContentPlaceHolder1_txtName" required="" placeholder="Enter Name" />
-                                  </div>
-
-                                  <div class="form-group col-lg-6 col-md-6  col-sm-6 ">
-                                      <div class="field-label">
-                                          Email <span class="required">*</span>
-                                      </div>
-                                      <input name="ctl00$ContentPlaceHolder1$txtEmail" type="text" id="ctl00_ContentPlaceHolder1_txtEmail" placeholder="Email Id" />
-                                  </div>
-
-                                  <div class="form-group col-lg-6 col-md-6  col-sm-6 ">
-                                      <div class="field-label">
-                                          Mobile No. <span class="required">*</span>
-                                          <span id="ctl00_ContentPlaceHolder1_rvDigits" style="color:Red;visibility:hidden;">Valid No</span>
-                                      </div>
-                                      <input name="ctl00$ContentPlaceHolder1$txtMobile" type="text" id="ctl00_ContentPlaceHolder1_txtMobile" required="" placeholder="Mobile No." />
-                                  </div>
-                              </div>
-
-                              
+                                                           
                               <h3>Donor Information</h3>
                               <div class="row clearfix">
 
@@ -122,7 +97,6 @@
                                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                       <div class="field-label">Blood Group <span class="required">*</span></div>
                                       <select name="ctl00$ContentPlaceHolder1$cboBloodGroup" id="ctl00_ContentPlaceHolder1_cboBloodGroup" class="custom-select-box">
-                                        <option value="00000000-0000-0000-0000-000000000000">Dont Know</option>
                                         <option value="06000000-0000-0000-0000-000000000002">A-</option>
                                         <option value="06000000-0000-0000-0000-000000000001">A+</option>
                                         <option value="06000000-0000-0000-0000-000000000006">AB-</option>
@@ -206,6 +180,8 @@
                                   <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6">
                                       <div class="field-label">Year </div>
                                       <select name="ctl00$ContentPlaceHolder1$cboDobYear" id="ctl00_ContentPlaceHolder1_cboDobYear" class="form-control form-group-margin">
+                                        <option value="2003">2003</option>
+                                        <option value="2002">2002</option>
                                         <option value="2001">2001</option>
                                         <option value="2000">2000</option>
                                         <option value="1999">1999</option>
@@ -362,7 +338,7 @@
 
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                   <div class="field-label">Address</div>
-                                  <textarea name="ctl00$ContentPlaceHolder1$txtAddress" rows="3" cols="20" id="ctl00_ContentPlaceHolder1_txtAddress" placeholder="Enter City or Village"></textarea>
+                                  <textarea name="ctl00$ContentPlaceHolder1$txtAddress" rows="3" cols="20" id="ctl00_ContentPlaceHolder1_txtAddress" placeholder="Enter your Address"></textarea>
 
                                 </div>
 
@@ -389,7 +365,7 @@
                                   </div>
                                   <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                       <label class="field-label">
-                                          Dist</label>
+                                          District</label>
                                       <select name="ctl00$ContentPlaceHolder1$cboCity" id="ctl00_ContentPlaceHolder1_cboCity" class="form-control form-group-margin ">
                                         <option value=""></option>
 
@@ -398,14 +374,20 @@
                                   </div>
                                   <div class="form-group col-lg-4 col-md-4  col-sm-4 col-xs-12">
                                       <label class="field-label">
-                                          Tehasil</label>
+                                          City</label>
                                       <select name="ctl00$ContentPlaceHolder1$cboTeh" id="ctl00_ContentPlaceHolder1_cboTeh" class="form-control form-group-margin">
                                         <option value=""></option>
 
                                       </select>
                                       <input type="hidden" name="ctl00$ContentPlaceHolder1$ccdTehasil_ClientState" id="ctl00_ContentPlaceHolder1_ccdTehasil_ClientState" />
                                     </div>
-
+                                    <div class="form-group col-lg-4 col-md-4  col-sm-4 ">
+                                      <div class="field-label">
+                                          Mobile No. <span class="required">*</span>
+                                          <span id="ctl00_ContentPlaceHolder1_rvDigits" style="color:Red;visibility:hidden;">Valid No</span>
+                                      </div>
+                                      <input name="ctl00$ContentPlaceHolder1$txtMobile" type="text" id="ctl00_ContentPlaceHolder1_txtMobile" required="" placeholder="Mobile No." />
+                                    </div>
                                   <div class="form-group col-lg-12 col-md-12 ">
                                       <input type="submit" name="ctl00$ContentPlaceHolder1$btnSave" value="Submit" onclick="" id="ctl00_ContentPlaceHolder1_btnSave" class="theme-btn btn-style-one  pull-right" />
                                   </div>
