@@ -68,7 +68,7 @@ app.get('/users/donor', checkNotAuthenticated, function(req, res, next) {
 
 app.get("/users/logout", (req, res) => {
   req.logout();
-  res.render("index", { message: "You have logged out successfully" });
+  res.redirect("/");
 });
 
 // POST requests
