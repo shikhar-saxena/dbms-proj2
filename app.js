@@ -16,11 +16,6 @@ const initializePassport = require("./config/passportConfig");
 
 initializePassport(passport);
 
-// var donorRouter = require('./routes/donor');
-// var usersRouter = require('./routes/users');
-// var seekerRouter = require('./routes/seeker');
-// var dashboardRouter = require('./routes/dashboard');
-
 var app = express();
 
 // view engine setup
@@ -49,32 +44,26 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-// app.use('/dashboard', dashboardRouter);
-// app.use('/donor', donorRouter);
-// app.use('/users', usersRouter);
-// app.use('/seeker', seekerRouter);
+// routes
 app.get('/', (req, res) => {
   res.sendFile('./index.html', { root: __dirname });
 });
-
-// app.get("/pranav", (req, res) => {
-//   res.render("index2");
-// });
-
 
 app.get("/users/register", checkAuthenticated, (req, res) => {
   res.render("register.ejs");
 });
 
 app.get("/users/login", checkAuthenticated, (req, res) => {
-  // flash sets a messages variable. passport sets the error message
-  //console.log(req.session.flash.error);
   res.render("login.ejs");
 });
 
 app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
   console.log(req.isAuthenticated());
   res.render("dashboard", { user: req.user.name, title: 'Donor' });
+});
+
+app.get('/users/donor', checkNotAuthenticated, function(req, res, next) {
+  res.render('donor', { title: 'Express' });
 });
 
 app.get("/users/logout", (req, res) => {
