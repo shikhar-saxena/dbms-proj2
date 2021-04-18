@@ -66,6 +66,10 @@ app.get('/users/donor', checkNotAuthenticated, function(req, res, next) {
   res.render('donor', { user: req.user.name, title: 'Donor' });
 });
 
+app.get('/users/home', checkNotAuthenticated, function(req, res, next) {
+  res.render('home', { user: req.user.name, title: 'Donor' });
+});
+
 app.get("/users/logout", (req, res) => {
   req.logout();
   res.redirect("/");
