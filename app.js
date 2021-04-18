@@ -113,9 +113,8 @@ app.post("/users/register", async (req, res) => {
         console.log(results.rows);
         
         if (results.rows.length > 0) {
-          return res.render("register", {
-            message: "Email already registered"
-          });
+          req.flash("failed_msg","Email already registered");
+          res.redirect("/users/register");
         } else {
           pool.query(
             `INSERT INTO users (name, email, password)
