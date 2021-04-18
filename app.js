@@ -63,7 +63,7 @@ app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
 });
 
 app.get('/users/donor', checkNotAuthenticated, function(req, res, next) {
-  res.render('donor', { title: 'Express' });
+  res.render('donor', { user: req.user.name, title: 'Donor' });
 });
 
 app.get("/users/logout", (req, res) => {
