@@ -76,6 +76,46 @@
                 <h1 >Welcome <%= user %></h1>
                 <h2></h2>
                 <!-- <a href="#about" class="btn-get-started scrollto">About Us</a> -->
+                <ul>
+                    <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %>
+                        <div class="row">
+                            <div class="col-12 text-center d-flex justify-content-center">
+                                <div id="myalert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    
+                                    <li><%= error.message %></li>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div> 
+                            </div>
+                        </div>
+                    <% }) %> <% } %>
+                </ul>
+                
+                <ul>
+                    <% if(messages.success_msg){%>
+                        <div class="row">
+                            <div class="col-12 text-center d-flex justify-content-center">
+                                <div id="myalert" class="alert alert-success alert-dismissible fade show" role="alert">
+                    
+                                    <li><%= messages.success_msg %></li>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div> 
+                            </div>
+                        </div>
+                    <% } %>
+                </ul>
+                <ul>
+                    <% if (messages.error) { %>
+                        <div class="row">
+                            <div class="col-12 text-center d-flex justify-content-center">
+                                <div id="myalert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    
+                                    <li><%= messages.error %></li>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div> 
+                            </div>
+                        </div>
+                    <% } %>
+                </ul>
                 </div>
             </section><!-- End Hero -->
 

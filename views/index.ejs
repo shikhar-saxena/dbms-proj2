@@ -6,7 +6,7 @@
         <!--meta tags-->
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <title>Blood Bank</title>
+        <title>Blood Donation Application</title>
         <meta content="" name="description">
         <meta content="" name="keywords">
 
@@ -72,6 +72,46 @@
                 <h1 >Group-20 Welcomes you to our website</h1>
                 <h2></h2>
                 <!-- <a href="#about" class="btn-get-started scrollto">About Us</a> -->
+                <ul>
+                    <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %>
+                        <div class="row">
+                            <div class="col-12 text-center d-flex justify-content-center">
+                                <div id="myalert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    
+                                    <li><%= error.message %></li>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div> 
+                            </div>
+                        </div>
+                    <% }) %> <% } %>
+                </ul>
+                
+                <ul>
+                    <% if(messages.success_msg){%>
+                        <div class="row">
+                            <div class="col-12 text-center d-flex justify-content-center">
+                                <div id="myalert" class="alert alert-success alert-dismissible fade show" role="alert">
+                    
+                                    <li><%= messages.success_msg %></li>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div> 
+                            </div>
+                        </div>
+                    <% } %>
+                </ul>
+                <ul>
+                    <% if (messages.error) { %>
+                        <div class="row">
+                            <div class="col-12 text-center d-flex justify-content-center">
+                                <div id="myalert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    
+                                    <li><%= messages.error %></li>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div> 
+                            </div>
+                        </div>
+                    <% } %>
+                </ul>
                 </div>
             </section><!-- End Hero -->
 
@@ -83,7 +123,7 @@
                     <div class="row">
                         <div class="vision col-12">
                             <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. 
+                                This web application has been created to provide 
                             </p>
                         </div>
                     </div>    
