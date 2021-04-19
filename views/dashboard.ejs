@@ -180,7 +180,9 @@
                                         </tbody>
                                     </table>
                                   </p>
-                                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                                  <% if( id == results[i].id) { %>
+                                  <a class="btn btn-primary" href='#'>Delete donation request</a>
+                                  <% } %>
                                 </div>
                             </div>
                         </div>

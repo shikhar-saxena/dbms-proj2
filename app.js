@@ -22,6 +22,19 @@ var storeStatus = {
   "A+":0, "A-":0, "B+":0, "B-":0, "O+":0, "O-":0, "AB+":0, "AB-":0
 };
 
+pool.query(
+  "select bloodgroup, count(*) from finale group by bloodgroup",
+  (err, results) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log(results.rows);
+    results.rows.forEach(res => {
+      storeStatus[res.bloodgroup] = res.count;
+    });
+  }
+);
+
 var app = express();
 
 // view engine setup
@@ -52,20 +65,7 @@ app.use(flash());
 
 // GET routes
 app.get("/", (req, res) => {
-  pool.query(
-    "select bloodgroup, count(*) from finale group by bloodgroup",
-    (err, results) => {
-      if (err) {
-        console.log(err);
-      }
-      console.log(results.rows);
-      results.rows.forEach(res => {
-        storeStatus[res.bloodgroup] = res.count;
-      });
-    }
-  );
-  console.log(storeStatus);
-  res.render("index.ejs",{storeStatus});
+  res.render("index.ejs");
 });
 
 app.get("/users/register", checkAuthenticated, (req, res) => {
@@ -78,7 +78,7 @@ app.get("/users/login", checkAuthenticated, (req, res) => {
 
 app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
   console.log(req.isAuthenticated());
-  var query = 'select name, email, mobile, bloodgroup, address, pincode from finale';
+  var query = 'select id, name, email, mobile, bloodgroup, address, pincode from finale';
   pool.query(query,
     (err, results) => {
       if (err) {
@@ -86,6 +86,7 @@ app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
       }
       console.log(results.rows);
       res.render("dashboard", {
+        id: req.user.id,
         user: req.user.name,
         email: req.user.email,
         title: "Donor",
@@ -96,27 +97,34 @@ app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
 });
 
 app.get("/users/donor", checkNotAuthenticated, function (req, res, next) {
-  // const query = `Select id from donors where id = ${req.user.id}`;
-  // pool.query(query,
-  //   (err, results) => {
-  //     if (err) {
-  //       console.log(err);
-  //     }
-  //     if(results.rows.length > 0) {
-  //       req.flash('error', 'Already filled the donors form');
-  //     }
-  //     res.render("dashboard", {
-  //       user: req.user.name,
-  //       email: req.user.email,
-  //       title: "Donor",
-  //       results: results.rows
-  //     });
-  //   }
-  // );
-  res.render("donor", { user: req.user.name, title: "Donor" });
+  const query = `Select id from donors where id = ${req.user.id}`;
+  pool.query(query,
+    (err, results) => {
+      if (err) {
+        console.log(err);
+      }
+      if(results.rows.length != 0) {
+        req.flash('error', 'Already filled the donors form, please delete your request');
+        res.redirect('/users/dashboard');
+      }
+      else res.render("donor", { user: req.user.name, title: "Donor" });
+    }
+  );
 });
 
 app.get("/users/home", checkNotAuthenticated, function (req, res, next) {
+  pool.query(
+    "select bloodgroup, count(*) from finale group by bloodgroup",
+    (err, results) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log(results.rows);
+      results.rows.forEach(res => {
+        storeStatus[res.bloodgroup] = res.count;
+      });
+    }
+  );
   res.render("home", { user: req.user.name, title: "Donor", storeStatus });
 });
 
@@ -425,6 +433,19 @@ app.post("/users/donor", async (req, res) => {
       }
     );
   }
+});
+
+app.delete('/users/donor', (req, res) => {
+  const query = `delete from donors where id = ${req.user.id}`;
+  pool.query(query,
+    (err, results) => {
+      if (err) {
+        console.log(err);
+      }
+      req.flash('sucess_msg', 'Successfully deleted donation request');
+      res.render("dashboard", { user: req.user.name, title: "Donor" });
+    }
+  );
 });
 
 function checkAuthenticated(req, res, next) {
