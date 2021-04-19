@@ -7,6 +7,11 @@ var path = require('path');
 var https = require('https');
 var logger = require('morgan');
 var dotenv = require('dotenv');
+const bodyParser = require("body-parser");
+const db = require('./query');
+
+// app.use(bodyParser.urlencoded({extended: true}));
+// app.use(bodyParser.json())
 
 // Load Config
 dotenv.config({ path: './config/config.env'});
@@ -178,6 +183,31 @@ app.post("/users/register", async (req, res) => {
   }
 });
 
+//queries
+// var todoDbList = db.getAllItems;
+const getAllItems = function(req, res) {
+  const sql = 'SELECT * FROM users ORDER BY id';
+  pool.query(
+      sql,
+      (err, results) => {
+        if (err) {
+          throw err;
+        }
+        console.log(results.rows);
+        req.flash("all_msg", results.rows);
+        res.redirect("/query");
+      }
+    );
+};
+
+//All todo information
+app.get('/query',function(req, res) {
+    res.render("queries", {
+        todoDbList: db.getAllItems()
+        });
+});
+
+//
 app.post(
   "/users/login",
   passport.authenticate("local", {
