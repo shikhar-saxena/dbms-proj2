@@ -6,7 +6,7 @@
         <!--meta tags-->
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <title>Blood Bank</title>
+        <title>Blood Bank|Home</title>
         <meta content="" name="description">
         <meta content="" name="keywords">
 
@@ -34,7 +34,11 @@
             <!--Navbar-->
             <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div class="container-fluid">
-                    
+                    <div class="info-box ">
+                        <div class="title mr-0">
+                            <a href='/users/search' class="theme-btn btn-style-two"><span class="fa fa-search"></span>&nbsp;Find Blood Bank</a>
+                        </div>
+                      </div>
                     <a class="navbar-brand"  href="#" ><strong>Blood Bank</strong></a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -47,11 +51,6 @@
                         </ul>
                     </div>
                      
-                    <div class="info-box ">
-                        <div class="title mr-0">
-                            <a href='/users/search' class="theme-btn btn-style-two"><span class="fa fa-search"></span>&nbsp;Find Blood Bank</a>
-                        </div>
-                      </div> |
                     <div class="info-box ">
                         <div class="title ml-2">
                             <a href='/users/logout' class="theme-btn btn-style-two"><span class="fa fa-lock"></span>&nbsp;Logout</a>
@@ -119,11 +118,11 @@
                     </div>
                     <div class="row">
                         <div class="vision col-12">
-                            <p>
+                            <p data-aos="fade-left" data-aos-delay="500">
                                 Blood is needed regularly for patients with diseases such as thalassemia and hemophilia, and also for the treatment of injuries after an accident, major surgeries, anemia, etc.
 
                             </p>
-                            <p>
+                            <p data-aos="fade-right" data-aos-delay="500">
                                 Did you know that people who donate blood are 88% less likely to suffer a heart attack and 33% less likely to acquire any type of cardiovascular disease.
 
                                 When you donate blood, it removes 225 to 250 milligrams of iron from your body, hence reducing the risk of heart disease.
@@ -142,7 +141,7 @@
                     <div class="row">
                       <% for(var i = 0; i < results.length; i++) { %>
                         <div class="col-lg-4 mb-4">
-                            <div class="card text-center border-warning" style="width: 18rem;">
+                            <div class="card text-center border-warning" style="width: 18rem;" data-aos="zoom-in" data-aos-delay="500">
                                 <div class="card-body">
                                   <h5 class="card-title"><%= title %></h5>
                                   <p class="card-text">
