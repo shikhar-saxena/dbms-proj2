@@ -76,14 +76,23 @@ app.get("/users/login", checkAuthenticated, (req, res) => {
   res.render("login.ejs");
 });
 
-///////////////////
 app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
   console.log(req.isAuthenticated());
-  res.render("dashboard", {
-    user: req.user.name,
-    email: req.user.email,
-    title: "Donor",
-  });
+  var query = 'select name, email, mobile, bloodgroup, address, pincode from finale';
+  pool.query(query,
+    (err, results) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log(results.rows);
+      res.render("dashboard", {
+        user: req.user.name,
+        email: req.user.email,
+        title: "Donor",
+        results: results.rows
+      });
+    }
+  );
 });
 
 app.get("/users/donor", checkNotAuthenticated, function (req, res, next) {
@@ -190,7 +199,7 @@ app.post("/users/register", async (req, res) => {
             [name, email, hashedPassword],
             (err, results) => {
               if (err) {
-                throw err;
+                console.log(err);
               }
               console.log(results.rows);
               req.flash("success_msg", "You are now registered. Please log in");

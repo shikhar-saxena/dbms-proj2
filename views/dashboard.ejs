@@ -144,24 +144,8 @@
                     <div id="visiond" class="section-title" data-aos="fade-up">
                         <p style="font-size:40px">Recent Donors</p>
                     </div>
-                    <div class="d-flex justify-content-end mb-4">
-                        <div class="btn-group">
-                            <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              Small button
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">A</a></li>
-                                <li><a class="dropdown-item" href="#">A+</a></li>
-                                <li><a class="dropdown-item" href="#">AB+</a></li>
-                                <li><a class="dropdown-item" href="#">AB</a></li>
-                                <li><a class="dropdown-item" href="#">B+</a></li>
-                                <li><a class="dropdown-item" href="#">B-</a></li>
-                                <li><a class="dropdown-item" href="#">O+</a></li>
-                                <li><a class="dropdown-item" href="#">O-</a></li>
-                            </ul>
-                        </div>
-                    </div>
                     <div class="row">
+                      <% for(var i = 0; i < results.length; i++) { %>
                         <div class="col-lg-4 mb-4">
                             <div class="card text-center border-warning" style="width: 18rem;">
                                 <div class="card-body">
@@ -171,19 +155,27 @@
                                         <tbody>
                                           <tr>
                                             <td>Name:</td>
-                                            <td>User</td>
+                                            <td><%= results[i].name %></td>
                                           </tr>
                                           <tr>
                                             <td>Email:</td>
-                                            <td>Email@email.com</td>
+                                            <td><%= results[i].email %></td>
                                           </tr>
                                           <tr>
                                             <td>Phone:</td>
-                                            <td>9874563210</td>
+                                            <td><%= results[i].mobile %></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Address:</td>
+                                            <td><%= results[i].address %></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Pincode:</td>
+                                            <td><%= results[i].pincode %></td>
                                           </tr>
                                           <tr>
                                             <td>Blood:</td>
-                                            <td>O+</td>
+                                            <td><%= results[i].bloodgroup %></td>
                                           </tr>
                                         </tbody>
                                     </table>
@@ -192,7 +184,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 mb-4">
+                      <% } %>
+                        <!-- <div class="col-lg-4 mb-4">
                             <div class="card text-center" style="width: 18rem;">
                                 <div class="card-body">
                                   <h5 class="card-title"><%= title %></h5>
@@ -278,10 +271,10 @@
                                         </tbody>
                                     </table>
                                   </p>
-                                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                                  <a href="#" class="btn btn-primary">Go somewhere</a> 
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </section>
