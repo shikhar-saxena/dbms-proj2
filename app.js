@@ -21,18 +21,18 @@ var storeStatus = {
   "A+":0, "A-":0, "B+":0, "B-":0, "O+":0, "O-":0, "AB+":0, "AB-":0
 };
 
-for (var property in storeStatus) {
-  pool.query(
-    "SELECT COUNT(*) FROM finale WHERE bloodgroup = '"+ property + "'",
-    (err, results) => {
-      if (err) {
-        console.log(err);
-      }
-      console.log(results.rows)
-      storeStatus[property] += parseInt(results.rows[0].count);
+pool.query(
+  "select bloodgroup, count(*) from finale group by bloodgroup",
+  (err, results) => {
+    if (err) {
+      console.log(err);
     }
-  );
-}
+    console.log(results.rows);
+    results.rows.forEach(res => {
+      storeStatus[res.bloodgroup] = res.count;
+    });
+  }
+);
 
 var app = express();
 
@@ -64,6 +64,7 @@ app.use(flash());
 
 // GET routes
 app.get("/", (req, res) => {
+  console.log(storeStatus);
   res.render("index.ejs",{storeStatus});
 });
 
