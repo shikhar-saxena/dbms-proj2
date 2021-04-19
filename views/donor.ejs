@@ -61,6 +61,34 @@
                 <div id="home"  class="container position-relative" data-aos="fade-up" data-aos-delay="500">
                 <h1 >Welcome <%= user %></h1>
                 <h2></h2>
+                <ul>
+                    <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %>
+                        <div class="row">
+                            <div class="col-12 text-center d-flex justify-content-center">
+                                <div id="myalert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    
+                                    <li><%= error.message %></li>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div> 
+                            </div>
+                        </div>
+                        
+                        <% }) %> <% } %>
+                </ul>
+        
+                <ul>
+                    <% if(messages.failed_msg){%>
+                        <div class="row">
+                            <div class="col-12 text-center d-flex justify-content-center">
+                                <div id="myalert" class="alert alert-success alert-dismissible fade show" role="alert">
+                    
+                                    <li><%= messages.failed_msg %></li>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div> 
+                            </div>
+                        </div>
+                    <% } %>
+                </ul>
                 <!-- <a href="#about" class="btn-get-started scrollto">About Us</a> -->
                 </div>
             </section><!-- End Hero -->
@@ -77,7 +105,7 @@
                       <!--Form Portlet-->
                       <div class="donation-form-outer">
                           <div class="form-portlet">
-                                                           
+                            <form action="/users/donor" method="POST">
                               <h3>Donor Information</h3>
                               <div class="row clearfix">
 
@@ -113,15 +141,15 @@
                                   <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6">
                                       <div class="field-label">Birth Date </div>
                                       <select name="bdate" id="bdate" class="form-control form-group-margin">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                        <option value="8">8</option>
-                                        <option value="9">9</option>
+                                        <option value="01">1</option>
+                                        <option value="02">2</option>
+                                        <option value="03">3</option>
+                                        <option value="04">4</option>
+                                        <option value="05">5</option>
+                                        <option value="06">6</option>
+                                        <option value="07">7</option>
+                                        <option value="08">8</option>
+                                        <option value="09">9</option>
                                         <option value="10">10</option>
                                         <option value="11">11</option>
                                         <option value="12">12</option>
@@ -150,18 +178,18 @@
                                   <div class="form-group col-lg-3 col-md-3 col-sm-3  col-xs-6 ">
                                       <div class="field-label">Month </div>
                                       <select name="bmonth" id="bmonth" class="form-control form-group-margin">
-                                        <option value="Jan">Jan</option>
-                                        <option value="Feb">Feb</option>
-                                        <option value="Mar">Mar</option>
-                                        <option value="Apr">Apr</option>
-                                        <option value="May">May</option>
-                                        <option value="Jun">Jun</option>
-                                        <option value="Jul">Jul</option>
-                                        <option value="Aug">Aug</option>
-                                        <option value="Sep">Sep</option>
-                                        <option value="Oct">Oct</option>
-                                        <option value="Nov">Nov</option>
-                                        <option value="Dec">Dec</option>
+                                        <option value="01">Jan</option>
+                                        <option value="02">Feb</option>
+                                        <option value="03">Mar</option>
+                                        <option value="04">Apr</option>
+                                        <option value="05">May</option>
+                                        <option value="06">Jun</option>
+                                        <option value="07">Jul</option>
+                                        <option value="08">Aug</option>
+                                        <option value="09">Sep</option>
+                                        <option value="10">Oct</option>
+                                        <option value="11">Nov</option>
+                                        <option value="12">Dec</option>
 
                                       </select>
                                   </div>
@@ -332,6 +360,7 @@
 
 
                               </div>
+                            </form>
                           </div>
                     </div>
                 </div>

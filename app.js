@@ -7,11 +7,6 @@ var path = require('path');
 var https = require('https');
 var logger = require('morgan');
 var dotenv = require('dotenv');
-const bodyParser = require("body-parser");
-const db = require('./query');
-
-// app.use(bodyParser.urlencoded({extended: true}));
-// app.use(bodyParser.json())
 
 // Load Config
 dotenv.config({ path: './config/config.env'});
@@ -63,6 +58,7 @@ app.get("/users/login", checkAuthenticated, (req, res) => {
   res.render("login.ejs");
 });
 
+///////////////////
 app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
   console.log(req.isAuthenticated());
   res.render("dashboard", { user: req.user.name, email: req.user.email, title: 'Donor' });
@@ -85,6 +81,7 @@ app.get("/users/logout", (req, res) => {
   res.redirect("/");
 });
 
+// POST routes
 app.post("/users/search", (req, res) => {
   let { __city } = req.body;
 
@@ -93,6 +90,9 @@ app.post("/users/search", (req, res) => {
   if(!__city) errors.push({ message: "Please enter your city" });
   
   else {
+    let char = __city[0];
+    char = char.toUpperCase();
+    __city = char + __city.slice(1);
     https.get(`https://api.data.gov.in/resource/fced6df9-a360-4e08-8ca0-f283fc74ce15?api-key=${process.env.apikey}&format=json&filters[__city]=${__city}`,
     (resp) => {
       let data = '';
@@ -115,7 +115,6 @@ app.post("/users/search", (req, res) => {
   }
 });
 
-// POST requests
 app.post("/users/register", async (req, res) => {
   let { name, email, password, password2 } = req.body;
 
@@ -180,57 +179,89 @@ app.post("/users/register", async (req, res) => {
   }
 });
 
-//queries
-// var todoDbList = db.getAllItems;
-const getAllItems = function() {
-  const sqlq = 'SELECT * FROM users ORDER BY id';
-  pool.query(
-      sqlq,
-      (err, results) => {
-        if (err) {
-          throw err;
-        }
-        console.log(results.rows);
-        return results.rows;
-        // req.flash("all_msg", results.rows);
-        // res.redirect("/query");
-      }
-    );
-};
-
-//All todo information
-app.get('/query',function(req, res) {
-    res.render("queries", {
-        obj: getAllItems()
-        });
-});
-
-//
 app.post(
   "/users/login",
   passport.authenticate("local", {
-    successRedirect: "/users/dashboard",
+    successRedirect: "/users/home",
     failureRedirect: "/users/login",
     failureFlash: true
   })
 );
 
-app.post('/users/donor', async (req, res) => {
-  let { bgroup, g, bdate, bmonth, byear, wt, ldd, ldm, ldy, address, pincode, state, district, city, mobile } = req.body;
+function dte(getDateres) {
+  var date;
+  switch(getDateres) {
+    case 1: date = '01'; break;
+    case 2: date = '02'; break;
+    case 3: date = '03'; break;
+    case 4: date = '04'; break;
+    case 5: date = '05'; break;
+    case 6: date = '06'; break;
+    case 7: date = '07'; break;
+    case 8: date = '08'; break;
+    case 9: date = '09'; break;
+    default: date = getDateres;
+  }
+  return date;
+}
 
+function validateDate(dateString) {
+  var makeDate = new Date(dateString);    
+
+  var getthis = '' + makeDate.getFullYear() + '-' + dte(makeDate.getMonth() + 1) + '-' + dte(makeDate.getDate());
+  console.log(makeDate.toString());
+  console.log(dateString);
+  console.log(getthis);
+  return getthis == dateString;
+}
+
+// function getAddress(errors, pincode) {
+
+//   var state, district;
+//   https.get(`https://api.data.gov.in/resource/6176ee09-3d56-4a3b-8115-21841576b2f6?api-key=${process.env.apikey}&format=json&offset=0&limit=2&filters[pincode]=${pincode}`,
+//     (resp) => {
+//       let data = '';
+
+//       // A chunk of data has been received.
+//       resp.on('data', (chunk) => {
+//         data += chunk;
+//       });
+
+//       // The whole response has been received. Print out the result.
+//       resp.on('end', () => {
+//         var Obj = JSON.parse(data);
+//         console.log(Obj);
+//         var result = Obj.records;
+//         state = result[0].statename;
+//         district =  result[0].districtname;
+//       });
+      
+//     }).on("error", (err) => errors.push(err));
+//     if( typeof state == undefined || typeof district == undefined) errors.push({message: 'Invalid PIN Code'});
+
+//     return {state, district};
+// }
+
+app.post('/users/donor', async (req, res) => {
+  
+  let id = req.user.id;
+  let name = req.user.name;
+  let { bloodgroup, usergender, bdate, bmonth, byear, weight, address, pincode, mobile } = req.body;
   let errors = [];
 
-  console.log({
-    bgroup, g, bdate, bmonth, byear, wt, ldd, ldm, ldy, address, pincode, state, district, city, mobile
-  });
+  console.log( id, { bloodgroup, usergender, bdate, bmonth, byear, weight, address, pincode, mobile });
 
-  if (!bgroup || !g || !bdate || !bmonth || !byear || !wt || !address || !pincode || !state || !district || !city || !mobile) {
-    errors.push({ message: "Please enter the necessary fields" });
+  if (!bloodgroup|| !usergender|| !bdate|| !bmonth|| !byear|| !weight|| !address|| !pincode|| !mobile) {
+    errors.push({ message: "Please enter all the fields" });
   }
 
-  var age = (bdate, bmonth, byear) => {
+  var dateString = '' + byear +'-' + bmonth + '-' + bdate;
+
+  if(!validateDate(dateString)) errors.push({message: 'Invalid Birth Date' });
+
+  var age = (dateString) => {
     var today = new Date();
-    var birthDate = new Date(`${byear}${bmonth}${bdate}`);
+    var birthDate = new Date(dateString);
     return today.getFullYear() - birthDate.getFullYear();
   }
 
@@ -238,48 +269,38 @@ app.post('/users/donor', async (req, res) => {
     errors.push({ message: "Donating blood is not permitted" });
   }
 
-  if (wt < 50) {
+  if (weight < 50) {
     errors.push({ message: "Donating blood is not permitted" });
   }
-
-  if (errors.length > 0) {
-    res.render("register", { errors, name, email, password, password2 });
-  } else {
-    hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
-    // Validation passed
-    pool.query(
-      `SELECT * FROM users
-        WHERE email = $1`,
-      [email],
-      (err, results) => {
-        if (err) {
-          console.log(err);
+  if(mobile.length != 10) {
+    errors.push({ message: "Invalid mobile number" });
+  }
+  if(pincode.length != 6) {
+    errors.push({ message: "Invalid PIN code" });
+  }
+  if(errors.length > 0) {
+    res.render('donor', { errors, user: name, title: 'Donor' });
+  }
+  else {
+    // // Validation passed
+    // var {state, district} = getAddress(errors, pincode);
+    
+    // if (errors.length > 0) {
+    //   res.render("donor", { errors, user: name, title: 'Donor' });
+    // } else {
+      pool.query(
+        `INSERT INTO donors VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [id, bloodgroup, usergender, dateString, weight, address, pincode, mobile],
+        (err, results) => {
+          if (err) {
+            throw(err);
+          }
+          console.log(results.rows);
+          req.flash("success_msg", "Your details have been submitted");
+          res.redirect("/users/dashboard");
         }
-        console.log(results.rows);
-        
-        if (results.rows.length > 0) {
-          return res.render("register", {
-            message: "Email already registered"
-          });
-        } else {
-          pool.query(
-            `INSERT INTO users (name, email, password)
-                VALUES ($1, $2, $3)
-                RETURNING id, password`,
-            [name, email, hashedPassword],
-            (err, results) => {
-              if (err) {
-                throw err;
-              }
-              console.log(results.rows);
-              req.flash("success_msg", "You are now registered. Please log in");
-              res.redirect("/users/login");
-            }
-          );
-        }
-      }
-    );
+      );
+    
   }
 });
 
