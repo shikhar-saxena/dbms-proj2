@@ -28,6 +28,35 @@
 
     <body>
 
+        <header>
+            <!--Navbar-->
+            <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+                <div class="container-fluid">
+                    <div class="info-box ">
+                        <div class="title ml-2">
+                            <a href='/users/dashboard' class="theme-btn btn-style-two"><span class="fa fa-dashboard"></span>&nbsp;Dashboard</a>
+                        </div>
+                    </div>
+                    <a class="navbar-brand"  href="#" ><strong>Blood Bank</strong></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarToggler">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 nav-pills">
+                            <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/users/home">Home</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="info-box ">
+                        <div class="title ml-2">
+                            <a href='/users/logout' class="theme-btn btn-style-two"><span class="fa fa-lock"></span>&nbsp;Logout</a>
+                        </div>
+                      </div>
+                </div>
+            </nav><!--End Navbar-->
+        </header>
+
 
         <ul>
             <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %>
@@ -60,16 +89,14 @@
 
         <div class="container-fluid my-5">
             <div class="row">
-                <div class="col-12 mb-4">
+                <div class="col-12 mb-4" style="padding-top: 100px;">
                     <div class="card text-center border-dark" style="width: 18rem;">
                             <div class="box">
-                                <form action="/search" method="POST">
-                                    <h1 class="mb-4">Find Nearby Blood Banks</h1>
+                                <form action="/users/search" method="POST">
+                                    <h3 class="mb-4">Find Nearby Blood Banks</h3>
                                     <!-- State city pincode district-->
+                                    <p>First letter in upper case</p>
                                     <input type="text" id="__city" name="__city" placeholder="Enter your City" required>
-                                    <!-- <input type="email" id="email" name="email" placeholder="Email" required>
-                                    <input type="password" id="password" name="password" placeholder="Password" required>
-                                    <input type="password" id="password2" name="password2" placeholder="confirm password" required> -->
                                     <input type="submit" value="Search"/>
                                 </form>
                             </div>
@@ -78,9 +105,9 @@
             </div>
         </div>
 
-        <div>
+        <div class="table-responsive">
             <% if (typeof results != 'undefined') { %> 
-            <table>
+            <table class="table">
                 <tr>
                     <% results[0].split(',').forEach(heading => { %>
                         <th><%= heading %></th>

@@ -747,6 +747,17 @@ box-shadow: 0px 0px 5px 3px rgba(76,69,76,0.38);
   font-weight: 500;
   padding: 25px;
 }
+
+.box h3 {
+  color: white;
+  text-transform: uppercase;
+  padding: 25px;
+}
+.box p {
+  color: white;
+  padding: 25px;
+}
+
 .box input[type="text"]:focus,
 .box input[type="email"]:focus,
 .box input[type="password"]:focus {

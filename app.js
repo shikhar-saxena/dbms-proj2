@@ -75,8 +75,8 @@ app.get('/search', (req, res) => {
   res.render('search');
 });
 
-app.get('/users/search', checkNotAuthenticated, (req, res) => {
-  res.render('search');
+app.get('/users/search', checkNotAuthenticated, function(req, res) {
+  res.render('loginsearch');
 });
 
 app.get("/users/logout", (req, res) => {
@@ -84,7 +84,7 @@ app.get("/users/logout", (req, res) => {
   res.redirect("/");
 });
 
-app.post("/search", (req, res) => {
+app.post("/users/search", (req, res) => {
   let { __city } = req.body;
 
   console.log({ __city });
@@ -104,7 +104,7 @@ app.post("/search", (req, res) => {
       // The whole response has been received. Print out the result.
       resp.on('end', () => {
         var results = data.split("\n");
-        res.render('search', { results: results });  
+        res.render('loginsearch', { results: results });  
       });
 
     }).on("error", (err) => {
