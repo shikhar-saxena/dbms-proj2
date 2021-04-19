@@ -34,7 +34,7 @@
             <!--Navbar-->
             <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div class="container-fluid">
-                    <a class="navbar-brand"  href="#" ><strong>Blood Bank</strong></a>
+                    <a class="navbar-brand"  href="/users/home" ><strong>Blood Bank</strong></a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -47,7 +47,7 @@
                     </div>
                     <div class="info-box ">
                       <div class="title">
-                          <a href='#' class="theme-btn btn-style-two"><span class="fa fa-lock"></span>&nbsp;Logout</a>
+                          <a href='/users/logout' class="theme-btn btn-style-two"><span class="fa fa-lock"></span>&nbsp;Logout</a>
                       </div>
                   </div>
                 </div>
@@ -84,7 +84,7 @@
 
                                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                       <div class="field-label">Blood Group </div>
-                                      <select name="bloodtype" id="bloodtype" class="custom-select-box">
+                                      <select name="bloodgroup" id="bloodgroup" class="custom-select-box">
                                         <option value="A-">A-</option>
                                         <option value="A+">A+</option>
                                         <option value="AB-">AB-</option>
@@ -100,7 +100,7 @@
 
                                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                       <div class="field-label">Gender </div>
-                                      <select name="donorgender" id="donorgender" class="custom-select-box">
+                                      <select name="usergender" id="usergender" class="custom-select-box">
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                         <option value="other">Other</option>
@@ -111,7 +111,7 @@
 
 
                                   <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                                      <div class="field-label">Birth Date  </div>
+                                      <div class="field-label">Birth Date </div>
                                       <select name="bdate" id="bdate" class="form-control form-group-margin">
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -230,7 +230,7 @@
                                       <div class="field-label">
                                           Weight 
                                       </div>
-                                      <input name="wt" type="text" id="wt" placeholder="Ex 55" />
+                                      <input name="weight" type="text" id="weight" placeholder="Ex 55" />
                                   </div>
 
 
@@ -243,7 +243,7 @@
 
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                   <div class="field-label">Address</div>
-                                  <textarea name="address" rows="3" cols="20" id="address" placeholder="Enter your Address"></textarea>
+                                  <textarea name="address" rows="3" cols="20" id="address" placeholder="Enter your Full Address"></textarea>
 
                                 </div>
 
@@ -258,7 +258,7 @@
 
 
 
-                                  <div class="form-group col-lg-4 col-md-4  col-sm-4 col-xs-12">
+                                  <!-- <div class="form-group col-lg-4 col-md-4  col-sm-4 col-xs-12">
                                       <label class="field-label">
                                           State</label>
                                       <select name="state" id="state" class="form-control form-group-margin ">
@@ -316,18 +316,18 @@
                                       <select name="ctl00$ContentPlaceHolder1$cboTeh" id="ctl00_ContentPlaceHolder1_cboTeh" class="form-control form-group-margin">
                                         <option value=""></option>
 
-                                      </select>
-                                      <input type="hidden" name="ctl00$ContentPlaceHolder1$ccdTehasil_ClientState" id="ctl00_ContentPlaceHolder1_ccdTehasil_ClientState" />
-                                    </div>
+                                      </select> 
+                                      <input type="hidden" name="ctl00$ContentPlaceHolder1$ccdTehasil_ClientState" id="ctl00_ContentPlaceHolder1_ccdTehasil_ClientState" /> 
+                                    </div> -->
                                     <div class="form-group col-lg-4 col-md-4  col-sm-4 ">
                                       <div class="field-label">
                                           Mobile No. 
-                                          <span id="ctl00_ContentPlaceHolder1_rvDigits" style="color:Red;visibility:hidden;">Valid No</span>
+                                          <!-- <span id="ctl00_ContentPlaceHolder1_rvDigits" style="color:Red;visibility:hidden;">Valid No</span> -->
                                       </div>
-                                      <input name="ctl00$ContentPlaceHolder1$txtMobile" type="text" id="ctl00_ContentPlaceHolder1_txtMobile" required="" placeholder="Mobile No." />
+                                      <input name="mobile" type="text" id="mobile" placeholder="Mobile No." />
                                     </div>
                                   <div class="form-group col-lg-12 col-md-12 ">
-                                      <input type="submit" name="ctl00$ContentPlaceHolder1$btnSave" value="Submit" onclick="" id="ctl00_ContentPlaceHolder1_btnSave" class="theme-btn btn-style-one  pull-right" />
+                                      <input type="submit" name="submit" value="Submit" onclick="" id="submit" class="theme-btn btn-style-one  pull-right" />
                                   </div>
 
 

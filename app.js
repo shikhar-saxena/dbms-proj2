@@ -76,10 +76,6 @@ app.get('/users/home', checkNotAuthenticated, function(req, res, next) {
   res.render('home', { user: req.user.name, title: 'Donor' });
 });
 
-app.get('/search', (req, res) => {
-  res.render('search');
-});
-
 app.get('/users/search', checkNotAuthenticated, function(req, res) {
   res.render('loginsearch');
 });
@@ -186,7 +182,7 @@ app.post("/users/register", async (req, res) => {
 
 //queries
 // var todoDbList = db.getAllItems;
-const getAllItems = function(req, res) {
+const getAllItems = function() {
   const sqlq = 'SELECT * FROM users ORDER BY id';
   pool.query(
       sqlq,
@@ -195,7 +191,7 @@ const getAllItems = function(req, res) {
           throw err;
         }
         console.log(results.rows);
-        res.send(results.rows);
+        return results.rows;
         // req.flash("all_msg", results.rows);
         // res.redirect("/query");
       }
@@ -205,7 +201,7 @@ const getAllItems = function(req, res) {
 //All todo information
 app.get('/query',function(req, res) {
     res.render("queries", {
-        todoDbList: db.getAllItems()
+        obj: getAllItems()
         });
 });
 
