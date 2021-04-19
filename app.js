@@ -7,6 +7,7 @@ var path = require("path");
 var https = require("https");
 var logger = require("morgan");
 var dotenv = require("dotenv");
+var validator = require("email-validator");
 
 // Load Config
 dotenv.config({ path: "./config/config.env" });
@@ -161,6 +162,10 @@ app.post("/users/register", async (req, res) => {
 
   if (!name || !email || !password || !password2) {
     errors.push({ message: "Please enter all fields" });
+  }
+
+  if(!validator.validate(email)) {
+    errors.push({ message: "Invalid Email address" });
   }
 
   if (password.length < 6) {
