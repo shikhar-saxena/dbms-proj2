@@ -181,7 +181,9 @@
                                     </table>
                                   </p>
                                   <% if( id == results[i].id) { %>
-                                  <a class="btn btn-primary" href='#'>Delete donation request</a>
+                                    <form method="POST" action="/users/donor?_method=DELETE">
+                                      <button type="submit" class="btn btn-primary">Delete donation request</button>
+                                    </form>
                                   <% } %>
                                 </div>
                             </div>

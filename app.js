@@ -8,6 +8,7 @@ var https = require("https");
 var logger = require("morgan");
 var dotenv = require("dotenv");
 var validator = require("email-validator");
+var methodOverride = require('method-override');
 
 // Load Config
 dotenv.config({ path: "./config/config.env" });
@@ -62,6 +63,8 @@ app.use(passport.initialize());
 // Store our variables to be persisted across the whole session. Works with app.use(Session) above
 app.use(passport.session());
 app.use(flash());
+
+app.use(methodOverride('_method'));
 
 // GET routes
 app.get("/", (req, res) => {
@@ -442,8 +445,16 @@ app.delete('/users/donor', (req, res) => {
       if (err) {
         console.log(err);
       }
-      req.flash('sucess_msg', 'Successfully deleted donation request');
-      res.render("dashboard", { user: req.user.name, title: "Donor" });
+      //console.log(results.rows);
+      req.flash('success_msg', 'Successfully deleted donation request');
+      res.redirect("/users/dashboard");
+      // , {
+      //   id: req.user.id,
+      //   user: req.user.name,
+      //   email: req.user.email,
+      //   title: "Donor",
+      //   results: results.rows
+      // });
     }
   );
 });
