@@ -79,24 +79,58 @@ app.get("/users/login", checkAuthenticated, (req, res) => {
   res.render("login.ejs");
 });
 
-app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
+// function update() {
+//   pool.query(
+//     "select bloodgroup, count(*) from finale group by bloodgroup",
+//     (err, results) => {
+//       if (err) {
+//         console.log(err);
+//       }
+//       console.log(results.rows);
+//       results.rows.forEach(res => {
+//         storeStatus[res.bloodgroup] = res.count;
+//       });
+//     }
+//   );
+// }
+
+app.get("/users/home", checkNotAuthenticated, (req, res) => {
   console.log(req.isAuthenticated());
-  var query = 'select id, name, email, mobile, bloodgroup, address, pincode from finale';
-  pool.query(query,
-    (err, results) => {
-      if (err) {
-        console.log(err);
-      }
-      console.log(results.rows);
-      res.render("dashboard", {
-        id: req.user.id,
-        user: req.user.name,
-        email: req.user.email,
-        title: "Donor",
-        results: results.rows
-      });
-    }
-  );
+  
+  //var results = getRows();
+  //update();
+
+  var query = 
+  `select id, name, email, mobile, bloodgroup, address, pincode from finale`;
+  
+
+      pool.query(
+        "select bloodgroup, count(*) from finale group by bloodgroup",
+        (err, resultss) => {
+          if (err) {
+            console.log(err);
+          }
+          console.log(resultss.rows);
+          resultss.rows.forEach(ress => {
+            storeStatus[ress.bloodgroup] = ress.count;
+          });
+          pool.query(query,
+            (err, results) => {
+              if (err) {
+                console.log(err);
+              }
+              console.log(results.rows);
+              results = results.rows;
+              res.render("home", {
+              id: req.user.id,
+              user: req.user.name,
+              email: req.user.email,
+              title: "Donor",
+              results,
+              storeStatus
+            });
+          });
+        });
 });
 
 app.get("/users/donor", checkNotAuthenticated, function (req, res, next) {
@@ -108,27 +142,11 @@ app.get("/users/donor", checkNotAuthenticated, function (req, res, next) {
       }
       if(results.rows.length != 0) {
         req.flash('error', 'Already filled the donors form, please delete your request');
-        res.redirect('/users/dashboard');
+        res.redirect('/users/home');
       }
       else res.render("donor", { user: req.user.name, title: "Donor" });
     }
   );
-});
-
-app.get("/users/home", checkNotAuthenticated, function (req, res, next) {
-  pool.query(
-    "select bloodgroup, count(*) from finale group by bloodgroup",
-    (err, results) => {
-      if (err) {
-        console.log(err);
-      }
-      console.log(results.rows);
-      results.rows.forEach(res => {
-        storeStatus[res.bloodgroup] = res.count;
-      });
-    }
-  );
-  res.render("home", { user: req.user.name, title: "Donor", storeStatus });
 });
 
 app.get("/users/search", checkNotAuthenticated, function (req, res) {
@@ -432,7 +450,7 @@ app.post("/users/donor", async (req, res) => {
         }
         console.log(results.rows);
         req.flash("success_msg", "Your details have been submitted");
-        res.redirect("/users/dashboard");
+        res.redirect("/users/home");
       }
     );
   }
@@ -447,7 +465,7 @@ app.delete('/users/donor', (req, res) => {
       }
       //console.log(results.rows);
       req.flash('success_msg', 'Successfully deleted donation request');
-      res.redirect("/users/dashboard");
+      res.redirect("/users/home");
       // , {
       //   id: req.user.id,
       //   user: req.user.name,
@@ -461,7 +479,7 @@ app.delete('/users/donor', (req, res) => {
 
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    return res.redirect("/users/dashboard");
+    return res.redirect("/users/home");
   }
   next();
 }

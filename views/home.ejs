@@ -44,18 +44,14 @@
                             <li class="nav-item">
                             <a class="nav-link " href="#hero">Home</a>
                             </li>
-                            <li class="nav-item">
-                            <a class="nav-link" href="#vision">Why Donate?</a>
-                            </li>
-                            
                         </ul>
                     </div>
                      
                     <div class="info-box ">
-                        <div class="title ml-2">
-                            <a href='/users/dashboard' class="theme-btn btn-style-two"><span class="fa fa-dashboard"></span>&nbsp;Dashboard</a>
+                        <div class="title mr-0">
+                            <a href='/users/search' class="theme-btn btn-style-two"><span class="fa fa-search"></span>&nbsp;Find Blood Bank</a>
                         </div>
-                    </div> |
+                      </div> |
                     <div class="info-box ">
                         <div class="title ml-2">
                             <a href='/users/logout' class="theme-btn btn-style-two"><span class="fa fa-lock"></span>&nbsp;Logout</a>
@@ -116,7 +112,7 @@
                 </div>
             </section><!-- End Hero -->
 
-            <section id="vision">
+            <section class="vision">
                 <div class="container my-5" >
                     <div id="visiond" class="section-title" data-aos="fade-up">
                         <p style="font-size:40px">Importance of Donation</p>
@@ -135,7 +131,63 @@
                                 Blood Center performs numerous tests on the donated blood. Therefore regular blood donation helps in sheilding you from serious diseases.
                             </p>
                         </div>
-                    </div>    
+                    </div>
+                </div>
+            </section>
+            <section id="recentdonors" class="recentdonars">
+                <div class="container my-5" >
+                    <div id="visiond" class="section-title" data-aos="fade-up">
+                        <p style="font-size:40px">Recent Donors</p>
+                    </div>
+                    <div class="row">
+                      <% for(var i = 0; i < results.length; i++) { %>
+                        <div class="col-lg-4 mb-4">
+                            <div class="card text-center border-warning" style="width: 18rem;">
+                                <div class="card-body">
+                                  <h5 class="card-title"><%= title %></h5>
+                                  <p class="card-text">
+                                    <table class="table">
+                                        <tbody>
+                                          <tr>
+                                            <td>Name:</td>
+                                            <td><%= results[i].name %></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Email:</td>
+                                            <td><%= results[i].email %></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Phone:</td>
+                                            <td><%= results[i].mobile %></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Address:</td>
+                                            <td><%= results[i].address %></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Pincode:</td>
+                                            <td><%= results[i].pincode %></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Blood:</td>
+                                            <td><%= results[i].bloodgroup %></td>
+                                          </tr>
+                                        </tbody>
+                                    </table>
+                                  </p>
+                                  <% if( id == results[i].id) { %>
+                                    <form method="POST" action="/users/donor?_method=DELETE">
+                                      <button type="submit" class="btn btn-primary">Delete donation request</button>
+                                    </form>
+                                  <% } %>
+                                </div>
+                            </div>
+                        </div>
+                      <% } %>
+                    </div>
+                </div>
+            </section>
+            <section class='vision'>
                     <div class="row text-center">
                         <!-- Start Header Text -->
                         <div class="col-12 text-white" style="padding-top: 60px;
