@@ -91,7 +91,7 @@ app.get("/users/donor", checkNotAuthenticated, function (req, res, next) {
 });
 
 app.get("/users/home", checkNotAuthenticated, function (req, res, next) {
-  res.render("home", { user: req.user.name, title: "Donor" });
+  res.render("home", { user: req.user.name, title: "Donor", storeStatus });
 });
 
 app.get("/users/search", checkNotAuthenticated, function (req, res) {
