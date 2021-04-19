@@ -96,6 +96,23 @@ app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
 });
 
 app.get("/users/donor", checkNotAuthenticated, function (req, res, next) {
+  // const query = `Select id from donors where id = ${req.user.id}`;
+  // pool.query(query,
+  //   (err, results) => {
+  //     if (err) {
+  //       console.log(err);
+  //     }
+  //     if(results.rows.length > 0) {
+  //       req.flash('error', 'Already filled the donors form');
+  //     }
+  //     res.render("dashboard", {
+  //       user: req.user.name,
+  //       email: req.user.email,
+  //       title: "Donor",
+  //       results: results.rows
+  //     });
+  //   }
+  // );
   res.render("donor", { user: req.user.name, title: "Donor" });
 });
 
@@ -139,7 +156,14 @@ app.post("/users/search", (req, res) => {
           resp.on("end", () => {
             var Obj = JSON.parse(data);
             var records = Obj.records;
-            res.render("loginsearch", { results: records });
+            if(records.length <= 0){
+              req.flash("error","No Blood Banks found");
+              res.redirect('/users/search');
+            }
+            else {
+              req.flash("success_msg","Blood Banks found");
+              res.render("loginsearch", { results: records });
+            }
           });
         }
       )
