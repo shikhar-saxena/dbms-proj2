@@ -4,6 +4,7 @@ const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
 var path = require('path');
+var https = require('https');
 var logger = require('morgan');
 var dotenv = require('dotenv');
 
@@ -70,9 +71,46 @@ app.get('/users/home', checkNotAuthenticated, function(req, res, next) {
   res.render('home', { user: req.user.name, title: 'Donor' });
 });
 
+app.get('/search', (req, res) => {
+  res.render('search');
+});
+
+app.get('/users/search', checkNotAuthenticated, (req, res) => {
+  res.render('search');
+});
+
 app.get("/users/logout", (req, res) => {
   req.logout();
   res.redirect("/");
+});
+
+app.post("/search", (req, res) => {
+  let { __city } = req.body;
+
+  console.log({ __city });
+
+  if(!__city) errors.push({ message: "Please enter your city" });
+  
+  else {
+    https.get(`https://api.data.gov.in/resource/fced6df9-a360-4e08-8ca0-f283fc74ce15?api-key=${process.env.apikey}&format=csv&offset=0&limit=10&filters[__city]=${__city}`,
+    (resp) => {
+      let data = '';
+
+      // A chunk of data has been received.
+      resp.on('data', (chunk) => {
+        data += chunk;
+      });
+
+      // The whole response has been received. Print out the result.
+      resp.on('end', () => {
+        var results = data.split("\n");
+        res.render('search', { results: results });  
+      });
+
+    }).on("error", (err) => {
+      console.log("Error: " + err.message);
+    });
+  }
 });
 
 // POST requests
