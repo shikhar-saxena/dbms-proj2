@@ -105,7 +105,7 @@
             </div>
         </div>
 
-        <div class="table-responsive">
+        <!-- <div class="table-responsive">
             <% if (typeof results != 'undefined') { %> 
             <table class="table">
                 <tr>
@@ -133,7 +133,60 @@
                 <% } %>
             </table>
             <% } %>
+        </div> -->
+
+        <% if (typeof results != 'undefined') { %> 
+        <div class="container-fluid my-5">
+            <div class="row">
+                <% for(var i = 1; i < results.length; i++) { %> 
+                    <div class="col-12 mb-4">
+                        <div class="card searchcard text-center border-warning">
+                            <div class="card-body">
+                              <p class="card-text">
+                                <table class="table">
+                                    <tbody>
+                                      <tr>
+                                        <td>Blood Bank Name:</td>
+                                        <td><%= results[i]._blood_bank_name %></td>
+                                      </tr>
+                                      <tr>
+                                        <td>Mobile Number:</td>
+                                        <td><%= results[i]._mobile %></td>
+                                      </tr>
+                                      <tr>
+                                        <td>Address:</td>
+                                        <td><%= results[i].__address %></td>
+                                      </tr>
+                                      <tr>
+                                        <td>City:</td>
+                                        <td><%= results[i].__city %></td>
+                                      </tr>
+                                      <tr>
+                                        <td>State:</td>
+                                        <td><%= results[i].__state %></td>
+                                      </tr>
+                                      <tr>
+                                        <td>Pincode:</td>
+                                        <td><%= results[i]._pincode %></td>
+                                      </tr>
+                                      <tr>
+                                        <td>Blood Component Available:</td>
+                                        <td><%= results[i].__blood_component_available %></td>
+                                      </tr>
+                                      <tr>
+                                        <td>Contact Number:</td>
+                                        <td><%= results[i].__contact_no %></td>
+                                      </tr>
+                                    </tbody>
+                                </table>
+                              </p>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
         </div>
+        <% } %>
 
         <div id="preloader"></div>        
 

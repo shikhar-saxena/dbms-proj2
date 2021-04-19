@@ -783,3 +783,21 @@ box-shadow: 0px 0px 5px 3px rgba(76,69,76,0.38);
 .box input[type="submit"]:hover {
   background: #2ecc71;
 }
+
+.searchcard{
+  background: #141E30;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #243B55, #141E30);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #243B55, #141E30); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+}
+
+.searchcard td{
+  color: white;
+}
+
+@media (min-width: 992px){
+  .searchcard{
+    width: 50%;
+  }
+}
