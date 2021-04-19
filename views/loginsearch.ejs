@@ -109,15 +109,26 @@
             <% if (typeof results != 'undefined') { %> 
             <table class="table">
                 <tr>
-                    <% results[0].split(',').forEach(heading => { %>
-                        <th><%= heading %></th>
-                    <% }) %>
+                    <th>Blood Bank Name</th>
+                    <th>Mobile Number</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Pincode</th>
+                    <th>Blood Component Available</th>
+                    <th>Contact Number</th>
+                    
                 </tr>
                 <% for(var i = 1; i < results.length; i++) { %> 
                     <tr>
-                        <% results[i].split(',').forEach(data => { %>
-                            <td><%= data %></td>
-                        <% }) %>
+                        <td><%= results[i]._blood_bank_name %></td>
+                        <td><%= results[i]._mobile %></td>
+                        <td><%= results[i].__address %></td>
+                        <td><%= results[i].__city %></td>
+                        <td><%= results[i].__state %></td>
+                        <td><%= results[i]._pincode %></td>
+                        <td><%= results[i].__blood_component_available %></td>
+                        <td><%= results[i].__contact_no %></td>
                     </tr> 
                 <% } %>
             </table>

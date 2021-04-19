@@ -92,7 +92,7 @@ app.post("/users/search", (req, res) => {
   if(!__city) errors.push({ message: "Please enter your city" });
   
   else {
-    https.get(`https://api.data.gov.in/resource/fced6df9-a360-4e08-8ca0-f283fc74ce15?api-key=${process.env.apikey}&format=csv&offset=0&limit=10&filters[__city]=${__city}`,
+    https.get(`https://api.data.gov.in/resource/fced6df9-a360-4e08-8ca0-f283fc74ce15?api-key=${process.env.apikey}&format=json&filters[__city]=${__city}`,
     (resp) => {
       let data = '';
 
@@ -103,8 +103,9 @@ app.post("/users/search", (req, res) => {
 
       // The whole response has been received. Print out the result.
       resp.on('end', () => {
-        var results = data.split("\n");
-        res.render('loginsearch', { results: results });  
+        var Obj = JSON.parse(data);
+        var records = Obj.records;
+        res.render('loginsearch', { results: records });  
       });
 
     }).on("error", (err) => {
