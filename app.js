@@ -187,16 +187,17 @@ app.post("/users/register", async (req, res) => {
 //queries
 // var todoDbList = db.getAllItems;
 const getAllItems = function(req, res) {
-  const sql = 'SELECT * FROM users ORDER BY id';
+  const sqlq = 'SELECT * FROM users ORDER BY id';
   pool.query(
-      sql,
+      sqlq,
       (err, results) => {
         if (err) {
           throw err;
         }
         console.log(results.rows);
-        req.flash("all_msg", results.rows);
-        res.redirect("/query");
+        res.send(results.rows);
+        // req.flash("all_msg", results.rows);
+        // res.redirect("/query");
       }
     );
 };
