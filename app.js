@@ -1,32 +1,49 @@
-var express = require('express');
+var express = require("express");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
-var path = require('path');
-var https = require('https');
-var logger = require('morgan');
-var dotenv = require('dotenv');
+var path = require("path");
+var https = require("https");
+var logger = require("morgan");
+var dotenv = require("dotenv");
 
 // Load Config
-dotenv.config({ path: './config/config.env'});
+dotenv.config({ path: "./config/config.env" });
 
-var {pool} = require('./config/dbConfig');
+var { pool } = require("./config/dbConfig");
 
 const initializePassport = require("./config/passportConfig");
 
 initializePassport(passport);
 
+var storeStatus = {
+  "A+":0, "A-":0, "B+":0, "B-":0, "O+":0, "O-":0, "AB+":0, "AB-":0
+};
+
+for (var property in storeStatus) {
+  pool.query(
+    "SELECT COUNT(*) FROM finale WHERE bloodgroup = '"+ property + "'",
+    (err, results) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log(results.rows)
+      storeStatus[property] += parseInt(results.rows[0].count);
+    }
+  );
+}
+
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
-app.use(logger('dev'));
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   session({
@@ -35,7 +52,7 @@ app.use(
     // Should we resave our session variables if nothing has changes which we dont
     resave: false,
     // Save empty value if there is no vaue which we do not want to do
-    saveUninitialized: false
+    saveUninitialized: false,
   })
 );
 
@@ -46,8 +63,8 @@ app.use(passport.session());
 app.use(flash());
 
 // GET routes
-app.get('/', (req, res) => {
-  res.render('index.ejs');
+app.get("/", (req, res) => {
+  res.render("index.ejs",{storeStatus});
 });
 
 app.get("/users/register", checkAuthenticated, (req, res) => {
@@ -61,19 +78,23 @@ app.get("/users/login", checkAuthenticated, (req, res) => {
 ///////////////////
 app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
   console.log(req.isAuthenticated());
-  res.render("dashboard", { user: req.user.name, email: req.user.email, title: 'Donor' });
+  res.render("dashboard", {
+    user: req.user.name,
+    email: req.user.email,
+    title: "Donor",
+  });
 });
 
-app.get('/users/donor', checkNotAuthenticated, function(req, res, next) {
-  res.render('donor', { user: req.user.name, title: 'Donor' });
+app.get("/users/donor", checkNotAuthenticated, function (req, res, next) {
+  res.render("donor", { user: req.user.name, title: "Donor" });
 });
 
-app.get('/users/home', checkNotAuthenticated, function(req, res, next) {
-  res.render('home', { user: req.user.name, title: 'Donor' });
+app.get("/users/home", checkNotAuthenticated, function (req, res, next) {
+  res.render("home", { user: req.user.name, title: "Donor" });
 });
 
-app.get('/users/search', checkNotAuthenticated, function(req, res) {
-  res.render('loginsearch');
+app.get("/users/search", checkNotAuthenticated, function (req, res) {
+  res.render("loginsearch");
 });
 
 app.get("/users/logout", (req, res) => {
@@ -87,31 +108,33 @@ app.post("/users/search", (req, res) => {
 
   console.log({ __city });
 
-  if(!__city) errors.push({ message: "Please enter your city" });
-  
+  if (!__city) errors.push({ message: "Please enter your city" });
   else {
     let char = __city[0];
     char = char.toUpperCase();
     __city = char + __city.slice(1);
-    https.get(`https://api.data.gov.in/resource/fced6df9-a360-4e08-8ca0-f283fc74ce15?api-key=${process.env.apikey}&format=json&filters[__city]=${__city}`,
-    (resp) => {
-      let data = '';
+    https
+      .get(
+        `https://api.data.gov.in/resource/fced6df9-a360-4e08-8ca0-f283fc74ce15?api-key=${process.env.apikey}&format=json&filters[__city]=${__city}`,
+        (resp) => {
+          let data = "";
 
-      // A chunk of data has been received.
-      resp.on('data', (chunk) => {
-        data += chunk;
+          // A chunk of data has been received.
+          resp.on("data", (chunk) => {
+            data += chunk;
+          });
+
+          // The whole response has been received. Print out the result.
+          resp.on("end", () => {
+            var Obj = JSON.parse(data);
+            var records = Obj.records;
+            res.render("loginsearch", { results: records });
+          });
+        }
+      )
+      .on("error", (err) => {
+        console.log("Error: " + err.message);
       });
-
-      // The whole response has been received. Print out the result.
-      resp.on('end', () => {
-        var Obj = JSON.parse(data);
-        var records = Obj.records;
-        res.render('loginsearch', { results: records });  
-      });
-
-    }).on("error", (err) => {
-      console.log("Error: " + err.message);
-    });
   }
 });
 
@@ -124,7 +147,7 @@ app.post("/users/register", async (req, res) => {
     name,
     email,
     password,
-    password2
+    password2,
   });
 
   if (!name || !email || !password || !password2) {
@@ -154,9 +177,9 @@ app.post("/users/register", async (req, res) => {
           console.log(err);
         }
         console.log(results.rows);
-        
+
         if (results.rows.length > 0) {
-          req.flash("failed_msg","Email already registered");
+          req.flash("failed_msg", "Email already registered");
           res.redirect("/users/register");
         } else {
           pool.query(
@@ -184,31 +207,56 @@ app.post(
   passport.authenticate("local", {
     successRedirect: "/users/home",
     failureRedirect: "/users/login",
-    failureFlash: true
+    failureFlash: true,
   })
 );
 
 function dte(getDateres) {
   var date;
-  switch(getDateres) {
-    case 1: date = '01'; break;
-    case 2: date = '02'; break;
-    case 3: date = '03'; break;
-    case 4: date = '04'; break;
-    case 5: date = '05'; break;
-    case 6: date = '06'; break;
-    case 7: date = '07'; break;
-    case 8: date = '08'; break;
-    case 9: date = '09'; break;
-    default: date = getDateres;
+  switch (getDateres) {
+    case 1:
+      date = "01";
+      break;
+    case 2:
+      date = "02";
+      break;
+    case 3:
+      date = "03";
+      break;
+    case 4:
+      date = "04";
+      break;
+    case 5:
+      date = "05";
+      break;
+    case 6:
+      date = "06";
+      break;
+    case 7:
+      date = "07";
+      break;
+    case 8:
+      date = "08";
+      break;
+    case 9:
+      date = "09";
+      break;
+    default:
+      date = getDateres;
   }
   return date;
 }
 
 function validateDate(dateString) {
-  var makeDate = new Date(dateString);    
+  var makeDate = new Date(dateString);
 
-  var getthis = '' + makeDate.getFullYear() + '-' + dte(makeDate.getMonth() + 1) + '-' + dte(makeDate.getDate());
+  var getthis =
+    "" +
+    makeDate.getFullYear() +
+    "-" +
+    dte(makeDate.getMonth() + 1) +
+    "-" +
+    dte(makeDate.getDate());
   console.log(makeDate.toString());
   console.log(dateString);
   console.log(getthis);
@@ -235,35 +283,64 @@ function validateDate(dateString) {
 //         state = result[0].statename;
 //         district =  result[0].districtname;
 //       });
-      
+
 //     }).on("error", (err) => errors.push(err));
 //     if( typeof state == undefined || typeof district == undefined) errors.push({message: 'Invalid PIN Code'});
 
 //     return {state, district};
 // }
 
-app.post('/users/donor', async (req, res) => {
-  
+app.post("/users/donor", async (req, res) => {
   let id = req.user.id;
   let name = req.user.name;
-  let { bloodgroup, usergender, bdate, bmonth, byear, weight, address, pincode, mobile } = req.body;
+  let {
+    bloodgroup,
+    usergender,
+    bdate,
+    bmonth,
+    byear,
+    weight,
+    address,
+    pincode,
+    mobile,
+  } = req.body;
   let errors = [];
 
-  console.log( id, { bloodgroup, usergender, bdate, bmonth, byear, weight, address, pincode, mobile });
+  console.log(id, {
+    bloodgroup,
+    usergender,
+    bdate,
+    bmonth,
+    byear,
+    weight,
+    address,
+    pincode,
+    mobile,
+  });
 
-  if (!bloodgroup|| !usergender|| !bdate|| !bmonth|| !byear|| !weight|| !address|| !pincode|| !mobile) {
+  if (
+    !bloodgroup ||
+    !usergender ||
+    !bdate ||
+    !bmonth ||
+    !byear ||
+    !weight ||
+    !address ||
+    !pincode ||
+    !mobile
+  ) {
     errors.push({ message: "Please enter all the fields" });
   }
 
-  var dateString = '' + byear +'-' + bmonth + '-' + bdate;
+  var dateString = "" + byear + "-" + bmonth + "-" + bdate;
 
-  if(!validateDate(dateString)) errors.push({message: 'Invalid Birth Date' });
+  if (!validateDate(dateString)) errors.push({ message: "Invalid Birth Date" });
 
   var age = (dateString) => {
     var today = new Date();
     var birthDate = new Date(dateString);
     return today.getFullYear() - birthDate.getFullYear();
-  }
+  };
 
   if (age < 18) {
     errors.push({ message: "Donating blood is not permitted" });
@@ -272,35 +349,42 @@ app.post('/users/donor', async (req, res) => {
   if (weight < 50) {
     errors.push({ message: "Donating blood is not permitted" });
   }
-  if(mobile.length != 10) {
+  if (mobile.length != 10) {
     errors.push({ message: "Invalid mobile number" });
   }
-  if(pincode.length != 6) {
+  if (pincode.length != 6) {
     errors.push({ message: "Invalid PIN code" });
   }
-  if(errors.length > 0) {
-    res.render('donor', { errors, user: name, title: 'Donor' });
-  }
-  else {
+  if (errors.length > 0) {
+    res.render("donor", { errors, user: name, title: "Donor" });
+  } else {
     // // Validation passed
     // var {state, district} = getAddress(errors, pincode);
-    
+
     // if (errors.length > 0) {
     //   res.render("donor", { errors, user: name, title: 'Donor' });
     // } else {
-      pool.query(
-        `INSERT INTO donors VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-        [id, bloodgroup, usergender, dateString, weight, address, pincode, mobile],
-        (err, results) => {
-          if (err) {
-            throw(err);
-          }
-          console.log(results.rows);
-          req.flash("success_msg", "Your details have been submitted");
-          res.redirect("/users/dashboard");
+    pool.query(
+      `INSERT INTO donors VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+      [
+        id,
+        bloodgroup,
+        usergender,
+        dateString,
+        weight,
+        address,
+        pincode,
+        mobile,
+      ],
+      (err, results) => {
+        if (err) {
+          console.log(err);
         }
-      );
-    
+        console.log(results.rows);
+        req.flash("success_msg", "Your details have been submitted");
+        res.redirect("/users/dashboard");
+      }
+    );
   }
 });
 
@@ -319,14 +403,14 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get("env") === "development" ? err : {};
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render("error");
 });
 
 module.exports = app;
