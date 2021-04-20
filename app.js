@@ -94,7 +94,7 @@ app.get("/users/login", checkAuthenticated, (req, res) => {
 //   );
 // }
 
-app.get("/users/home", checkNotAuthenticated, (req, res) => {
+app.get("/users/home", checkNotAuthenticated, async (req, res) => {
   console.log(req.isAuthenticated());
   
   //var results = getRows();
@@ -102,38 +102,52 @@ app.get("/users/home", checkNotAuthenticated, (req, res) => {
 
   var query = 
   `select id, name, email, mobile, bloodgroup, address, pincode from finale`;
-  
-
-      pool.query(
-        "select bloodgroup, count(*) from finale group by bloodgroup",
-        (err, resultss) => {
+      pool.query(query,
+        (err, results) => {
           if (err) {
             console.log(err);
           }
-          console.log(resultss.rows);
-          resultss.rows.forEach(ress => {
-            storeStatus[ress.bloodgroup] = ress.count;
-          });
-          pool.query(query,
-            (err, results) => {
-              if (err) {
-                console.log(err);
-              }
-              console.log(results.rows);
-              results = results.rows;
-              res.render("home", {
-              id: req.user.id,
-              user: req.user.name,
-              email: req.user.email,
-              title: "Donor",
-              results,
-              storeStatus
-            });
-          });
+          console.log(results.rows);
+          res.render("home", {
+          id: req.user.id,
+          user: req.user.name,
+          email: req.user.email,
+          title: "Donor",
+          results: results.rows,
+          storeStatus
         });
+      });
+
+      // pool.query(
+      //   "select bloodgroup, count(*) from finale group by bloodgroup",
+      //   (err, resultss) => {
+      //     if (err) {
+      //       console.log(err);
+      //     }
+      //     console.log(resultss.rows);
+      //     resultss.rows.forEach(ress => {
+      //       storeStatus[ress.bloodgroup] = ress.count;
+      //     });
+      //     pool.query(query,
+      //       (err, results) => {
+      //         if (err) {
+      //           console.log(err);
+      //         }
+      //         console.log(results.rows);
+      //         results = results.rows;
+      //         res.render("home", {
+      //         id: req.user.id,
+      //         user: req.user.name,
+      //         email: req.user.email,
+      //         title: "Donor",
+      //         results,
+      //         storeStatus
+      //       });
+      //     });
+      //   });
 });
 
-app.get("/users/donor", checkNotAuthenticated, function (req, res, next) {
+app.get("/users/donor", checkNotAuthenticated, async function (req, res, next) {
   const query = `Select id from donors where id = ${req.user.id}`;
   pool.query(query,
     (err, results) => {
@@ -432,6 +446,7 @@ app.post("/users/donor", async (req, res) => {
     // if (errors.length > 0) {
     //   res.render("donor", { errors, user: name, title: 'Donor' });
     // } else {
+    storeStatus[bloodgroup]++;
     pool.query(
       `INSERT INTO donors VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
       [
@@ -456,23 +471,48 @@ app.post("/users/donor", async (req, res) => {
   }
 });
 
-app.delete('/users/donor', (req, res) => {
-  const query = `delete from donors where id = ${req.user.id}`;
-  pool.query(query,
+app.delete('/users/donor', async (req, res) => {
+  //const query = `delete from donors where id = ${req.user.id}`;
+  // pool.query(query,
+  //   (err, results) => {
+  //     if (err) {
+  //       console.log(err);
+  //     }
+  //     //console.log(results.rows);
+  //     req.flash('success_msg', 'Successfully deleted donation request');
+  //     res.redirect("/users/home");
+  //     // , {
+  //     //   id: req.user.id,
+  //     //   user: req.user.name,
+  //     //   email: req.user.email,
+  //     //   title: "Donor",
+  //     //   results: results.rows
+  //     // });
+  //   }
+  // );
+  pool.query(
+    `SELECT bloodgroup FROM donors
+      WHERE id = $1`,
+    [req.user.id],
     (err, results) => {
       if (err) {
         console.log(err);
       }
-      //console.log(results.rows);
-      req.flash('success_msg', 'Successfully deleted donation request');
-      res.redirect("/users/home");
-      // , {
-      //   id: req.user.id,
-      //   user: req.user.name,
-      //   email: req.user.email,
-      //   title: "Donor",
-      //   results: results.rows
-      // });
+      console.log(results.rows);
+      storeStatus[results.rows[0].bloodgroup]--;
+
+        pool.query(
+          `delete from donors where id = $1`,
+          [req.user.id],
+          (err, results) => {
+            if (err) {
+              console.log(err);
+            }
+            req.flash('success_msg', 'Successfully deleted donation request');
+            res.redirect("/users/home");
+          }
+        );
+      
     }
   );
 });
