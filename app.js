@@ -110,7 +110,7 @@ app.get("/users/home", checkNotAuthenticated, async (req, res) => {
   //update();
 
   
-      pool.query('select id, name, email, mobile, bloodgroup, address, pincode from finale',
+      pool.query('select id, name, email, mobile, bloodgroup, address, pincode from users natural join donors',
         (err, results) => {
           if (err) {
             console.log(err);
@@ -469,10 +469,8 @@ app.post("/users/donor", async (req, res) => {
         if (err) {
           console.log(err);
         }
-        if(results.rows !== undefined) {
-          req.flash("success_msg", "Your details have been submitted");
-          res.redirect("/users/home");
-        }
+        req.flash("success_msg", "Your details have been submitted");
+        res.redirect("/users/home");
       }
     );
   }
