@@ -29,9 +29,11 @@ pool.query(
     if (err) {
       console.log(err);
     }
-    results.rows.forEach(res => {
-      storeStatus[res.bloodgroup] = res.count;
-    });
+    if(results !== undefined || results != null) {
+      results.rows.forEach(res => {
+        storeStatus[res.bloodgroup] = res.count;
+      });
+    }
   }
 );
 
