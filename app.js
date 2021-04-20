@@ -63,11 +63,6 @@ app.use(
     resave: false,
     // Save empty value if there is no vaue which we do not want to do
     saveUninitialized: false,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-      aameSite: true,
-      secure: true // ENABLE ONLY ON HTTPS
-    }
     //cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }
   })
 );
