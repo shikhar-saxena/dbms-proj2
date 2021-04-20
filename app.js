@@ -116,7 +116,6 @@ app.get("/users/home", checkNotAuthenticated, async (req, res) => {
           if (err) {
             console.log(err);
           }
-          console.log(results.rows);
           res.render("home", {
           id: req.user.id,
           user: req.user.name,
@@ -267,8 +266,6 @@ app.post("/users/register", async (req, res) => {
         if (err) {
           console.log(err);
         }
-        console.log(results.rows);
-
         if (results.rows.length > 0) {
           req.flash("failed_msg", "Email already registered");
           res.redirect("/users/register");
@@ -282,7 +279,6 @@ app.post("/users/register", async (req, res) => {
               if (err) {
                 console.log(err);
               }
-              console.log(results.rows);
               req.flash("success_msg", "You are now registered. Please log in");
               res.redirect("/users/login");
             }
@@ -472,7 +468,6 @@ app.post("/users/donor", async (req, res) => {
         if (err) {
           console.log(err);
         }
-        console.log(results.rows);
         req.flash("success_msg", "Your details have been submitted");
         res.redirect("/users/home");
       }
@@ -507,7 +502,6 @@ app.delete('/users/donor', async (req, res) => {
       if (err) {
         console.log(err);
       }
-      console.log(results.rows);
       storeStatus[results.rows[0].bloodgroup]--;
 
         pool.query(
