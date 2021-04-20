@@ -11,7 +11,7 @@ function initialize(passport) {
             [email],
             (err, results) => {
                 if (err) {
-                    throw err;
+                    console.log(err);
                 }
                 console.log(results.rows);
 
