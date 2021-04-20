@@ -299,13 +299,13 @@ app.post("/users/register", async (req, res) => {
 });
 
 app.post(
-  "/users/login",
+  "/users/login", (req, res) => {
   passport.authenticate("local", {
     successRedirect: "/users/home",
     failureRedirect: "/users/login",
     failureFlash: true,
-  })
-);
+  })(req, res);
+});
 
 function dte(getDateres) {
   var date;
