@@ -453,7 +453,7 @@ app.post("/users/donor", async (req, res) => {
     //   res.render("donor", { errors, user: name, title: 'Donor' });
     // } else {
     pool.query(
-      `INSERT INTO donors VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+      `INSERT INTO donors VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
       [
         id,
         bloodgroup,
@@ -468,7 +468,7 @@ app.post("/users/donor", async (req, res) => {
         if (err) {
           console.log(err);
         }
-        if(typeof results != undefined) {
+        if(results.rows.length > 0) {
         storeStatus[bloodgroup]++;
         req.flash("success_msg", "Your details have been submitted");
         res.redirect("/users/home");
