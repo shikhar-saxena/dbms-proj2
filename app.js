@@ -29,7 +29,6 @@ pool.query(
     if (err) {
       console.log(err);
     }
-    console.log(results.rows);
     results.rows.forEach(res => {
       storeStatus[res.bloodgroup] = res.count;
     });
