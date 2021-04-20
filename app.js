@@ -110,7 +110,7 @@ app.get("/users/home", checkNotAuthenticated, async (req, res) => {
   //update();
 
   
-      pool.query('select id, name, email, mobile, bloodgroup, address, pincode from users natural join donors',
+      pool.query('select id, name, email, mobile, bloodgroup, address, pincode from finale',
         (err, results) => {
           if (err) {
             console.log(err);
@@ -452,7 +452,6 @@ app.post("/users/donor", async (req, res) => {
     // if (errors.length > 0) {
     //   res.render("donor", { errors, user: name, title: 'Donor' });
     // } else {
-    storeStatus[bloodgroup]++;
     pool.query(
       `INSERT INTO donors VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
       [
@@ -469,8 +468,12 @@ app.post("/users/donor", async (req, res) => {
         if (err) {
           console.log(err);
         }
-        req.flash("success_msg", "Your details have been submitted");
-        res.redirect("/users/home");
+        else if(typeof results !== undefined)
+        {
+          storeStatus[bloodgroup]++;
+          req.flash("success_msg", "Your details have been submitted");
+          res.redirect("/users/home");
+        }
       }
     );
   }
@@ -503,8 +506,6 @@ app.delete('/users/donor', async (req, res) => {
       if (err) {
         console.log(err);
       }
-      storeStatus[results.rows[0].bloodgroup]--;
-
         pool.query(
           `delete from donors where id = $1`,
           [req.user.id],
@@ -512,8 +513,11 @@ app.delete('/users/donor', async (req, res) => {
             if (err) {
               console.log(err);
             }
-            req.flash('success_msg', 'Successfully deleted donation request');
-            res.redirect("/users/home");
+            else if(typeof results !== undefined) {
+              storeStatus[results.rows[0].bloodgroup]--;
+              req.flash('success_msg', 'Successfully deleted donation request');
+              res.redirect("/users/home");
+            }
           }
         );
       
