@@ -17,10 +17,6 @@ background: linear-gradient(to right, #480048, #C04848); /* W3C, IE 10+/ Edge, F
 
 }
 
-.navbar {
-  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06);
-}
 .navbar{
   background: #8E0E00;  /* fallback for old browsers */
 background: -webkit-linear-gradient(to right, #1F1C18, #8E0E00);  /* Chrome 10-25, Safari 5.1-6 */
@@ -29,34 +25,25 @@ background: linear-gradient(to right, #1F1C18, #8E0E00); /* W3C, IE 10+/ Edge, F
   
  }
 .navbar .navbar-brand strong{
-    font-family: 'Yellowtail', cursive; 
+    font-family: "lucida bright"; 
     font-size: 30px;
 } 
 @media (min-width: 992px)
 {
     .navbar .navbar-brand strong{
-        font-family:  'Yellowtail', cursive; 
+        font-family: "lucida bright"; 
         font-size: 35px; 
         position: absolute; 
         left: 45%;
         right: 50%;
         top: 20%;
         bottom: 10%;
-        /* transform: translatex(-50%); */
-    }
-    .navbar .navbar-brand img{
-        position: relative;
-        left: 70%;
     }
 }
 .nav-link {
   font-family: "lucida bright";
   font-size: 18px;
   text-transform: capitalize;
-  /* font-weight: 400; */
-  /* color: #ffffff !important; */
-  /* border-bottom: 0.05px solid transparent;
-  transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); */
   }
 
 .navbar-toggler:focus,
@@ -79,16 +66,17 @@ background: linear-gradient(to right, #1F1C18, #8E0E00); /* W3C, IE 10+/ Edge, F
     text-transform: capitalize;
     justify-content: center;
   }
-}
-
-
-
-
-@media (max-width: 360px){
-  .navbar img{
-    width: 40px;
+  .largescreen{
+    display: none;
   }
 }
+
+@media (min-width: 992px){
+  .smallscreen{
+    display: none;
+  }
+}
+
 @media (min-width: 768px) {
   .navbar li {
     margin-left: 0.5em;
@@ -134,24 +122,6 @@ background: linear-gradient(to right, #1F1C18, #8E0E00); /* W3C, IE 10+/ Edge, F
   color: #eee;
   margin-bottom: 30px;
   font-size: 24px;
-}
-
-#hero .btn-get-started {
-  font-family: "Raleway", sans-serif;
-  text-transform: uppercase;
-  font-weight: 500;
-  font-size: 14px;
-  letter-spacing: 0.5px;
-  display: inline-block;
-  padding: 10px 28px;
-  transition: 0.5s;
-  border: 2px solid #fff;
-  color: #fff;
-}
-
-#hero .btn-get-started:hover {
-  background: #cc1616;
-  border-color: #cc1616;
 }
 
 @media (min-width: 1024px) {
@@ -216,7 +186,7 @@ a:hover{
 
   .btn-style-four:hover{
     background:none;
-    color:#e45b1f;
+    color:#fff2ec;
   }
   
 
@@ -245,7 +215,7 @@ a:hover{
   }
 
   .btn-style-two:hover{
-    border-color:#e45b1f;
+    border-color:#05d6b3;
     color:#e4b61f;
   }
 
@@ -266,7 +236,7 @@ font-size: 60px;
 margin-bottom: 25px;
 }
 .rounded-icons {
-width: 200px;
+width: 220px;
 height: 200px;
 margin: 0 auto 25px;
 border-radius: 50% !important;
@@ -572,10 +542,10 @@ box-shadow: 0px 0px 5px 3px rgba(76,69,76,0.38);
 	padding:9px 30px;
 	line-height:28px;
 	text-transform:uppercase;
-	background:#e45b1f;
+	background:#9b7701;
 	color:#ffffff;
 	letter-spacing:0px;
-	border:2px solid #e45b1f;
+	border:2px solid #9b6502;
 	font-size:14px;
 	font-weight:600;
 	border-radius:5px;
@@ -583,7 +553,7 @@ box-shadow: 0px 0px 5px 3px rgba(76,69,76,0.38);
 
 .btn-style-one:hover{
 	background:none;
-	color:#e45b1f;
+	color:#ffffff;
 }
 
 
