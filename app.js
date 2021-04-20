@@ -470,7 +470,7 @@ app.post("/users/donor", async (req, res) => {
         }
         if(typeof results !== undefined) {
         storeStatus[bloodgroup]++;
-        req.flash("success_msg", "Your details have been submitted");
+        req.flash("success_msg", "Your details have been submitted. Scroll down to check your response");
         res.redirect("/users/home");
         }
       }
