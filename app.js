@@ -468,7 +468,7 @@ app.post("/users/donor", async (req, res) => {
         if (err) {
           console.log(err);
         }
-        if(results.rows.length > 0) {
+        if(typeof results !== undefined && results.rows.length > 0) {
         storeStatus[bloodgroup]++;
         req.flash("success_msg", "Your details have been submitted");
         res.redirect("/users/home");
