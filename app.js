@@ -469,8 +469,10 @@ app.post("/users/donor", async (req, res) => {
         if (err) {
           console.log(err);
         }
-        req.flash("success_msg", "Your details have been submitted");
-        res.redirect("/users/home");
+        if(results.rows !== undefined) {
+          req.flash("success_msg", "Your details have been submitted");
+          res.redirect("/users/home");
+        }
       }
     );
   }
