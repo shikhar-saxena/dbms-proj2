@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
+const pgSession = require('connect-pg-simple')(session)
 var path = require("path");
 var https = require("https");
 var logger = require("morgan");
@@ -50,12 +51,24 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   session({
+
+    store: new pgSession({
+      pool: pool,
+      tableName: 'session'
+    }),
+
     // Key we want to keep secret which will encrypt all of our information
     secret: process.env.SESSION_SECRET,
     // Should we resave our session variables if nothing has changes which we dont
     resave: false,
     // Save empty value if there is no vaue which we do not want to do
     saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      aameSite: true,
+      secure: true // ENABLE ONLY ON HTTPS
+    }
+    //cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }
   })
 );
 
