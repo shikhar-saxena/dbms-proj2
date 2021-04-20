@@ -109,21 +109,22 @@ app.get("/users/home", checkNotAuthenticated, async (req, res) => {
   //var results = getRows();
   //update();
 
-  var query = 
-  `select id, name, email, mobile, bloodgroup, address, pincode from finale`;
-      pool.query(query,
+  
+      pool.query('select id, name, email, mobile, bloodgroup, address, pincode from finale',
         (err, results) => {
           if (err) {
             console.log(err);
           }
-          res.render("home", {
-          id: req.user.id,
-          user: req.user.name,
-          email: req.user.email,
-          title: "Donor",
-          results: results.rows,
-          storeStatus
-        });
+          else if(typeof results !== undefined) {
+            res.render("home", {
+              id: req.user.id,
+              user: req.user.name,
+              email: req.user.email,
+              title: "Donor",
+              results: results.rows,
+              storeStatus
+            });
+          }
       });
 
       // pool.query(
